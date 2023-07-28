@@ -13,8 +13,8 @@ class Chapter extends Model
     ];
     protected $primaryKey='id';
     protected $table='chapters';
-    public function books()
+    public function book()
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Book::class,'id_book');
     }
 }

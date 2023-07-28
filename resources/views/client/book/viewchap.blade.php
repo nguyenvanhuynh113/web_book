@@ -1,7 +1,9 @@
 @extends('layouts.client')
 @section('content')
     <div class="container">
-        <h3 class="mt-3 text-uppercase"><i class="bi bi-arrow-right"></i> {{$book->name}} / {{$chapter->name}}</h3>
+        <h3 class="mt-3 text-uppercase"><i class="bi bi-arrow-right"></i> <a href="{{route('xemsach',$book->id)}}"
+                                                                             style="text-decoration: none;"> {{$book->name}} </a>
+            / {{$chapter->name}}</h3>
         <div class="container">
             <div class="card-body">
                 <p>{!! $chapter->content !!}</p>

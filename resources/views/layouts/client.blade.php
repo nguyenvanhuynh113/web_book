@@ -141,7 +141,7 @@
                                             class="bi bi-box-arrow-in-right"></i>
                                         {{ __('Logout') }}
                                     </a>
-                                    <a class="dropdown-item" href=""> <i class="bi bi-person"></i> Profile</a>
+                                    <a class="dropdown-item" href="{{route('profile', Auth::user()->id)}}"> <i class="bi bi-person"></i> Profile</a>
                                     <a class="dropdown-item" href=""> <i class="bi bi-heart"></i> Theo dõi</a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                           class="d-none">

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TextToSpeechController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
@@ -23,6 +24,7 @@ Route::group(['middleware' => 'role'], function () {
     Route::resource('book',\App\Http\Controllers\BookController::class);
     Route::resource('chapter',\App\Http\Controllers\ChapterController::class);
     Route::get('getchap/{id}',[\App\Http\Controllers\BookController::class,'getchapter'])->name('getchap');
+    Route::resource('user',\App\Http\Controllers\UserController::class);
 });
 
 Route::get('/',[\App\Http\Controllers\TrangChuController::class,'index']);
@@ -33,3 +35,7 @@ Route::get('xemnoidungsach/{id}',[\App\Http\Controllers\TrangChuController::clas
 Route::get('search',[\App\Http\Controllers\TrangChuController::class,'search'])->name('timkiem');
 Route::get('/search_suggestions', [\App\Http\Controllers\TrangChuController::class, 'searchSuggestions'])->name('search.suggestions');
 Route::get('like/{id}',[\App\Http\Controllers\TrangChuController::class,'like'])->name('like');
+Route::get('user_profile/{id}',[\App\Http\Controllers\TrangChuController::class,'profile'])->name('profile');
+Route::patch('capnhatuser/{id}',[\App\Http\Controllers\TrangChuController::class,'capnhatuser'])->name('capnhatuser');
+
+Route::get('/text-to-speech', [TextToSpeechController::class, 'index']);

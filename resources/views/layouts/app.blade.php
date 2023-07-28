@@ -78,6 +78,15 @@
                                     <li><a class="dropdown-item" href="{{route('book.create')}}">Add book</a></li>
                                 </ul>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    User
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                    <li><a class="dropdown-item" href="{{route('user.index')}}">List users</a></li>
+                                </ul>
+                            </li>
                         </ul>
                         <form class="d-flex">
                             <input class="form-control me-2 col-md-6 f" type="search" placeholder="Search" aria-label="Search">

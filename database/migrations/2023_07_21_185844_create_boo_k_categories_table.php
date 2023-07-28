@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_category');
             $table->timestamps();
             $table->foreign('id_book')->references('id')->on('books');
-            $table->foreign('id_category')->references('id')->on('categories');
+            $table->foreign('id_category')->references('id')->on('categories    ');
         });
     }
 

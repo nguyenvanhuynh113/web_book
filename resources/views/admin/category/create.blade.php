@@ -29,18 +29,18 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="title" name="category_name"
+                                <input type="text" class="form-control" id="title" name="category_name" value="{{old('category_name')}}"
                                        placeholder="Category name"
                                        onkeyup="ChangeToSlug();">
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="exampleInputPassword1" name="title"
+                                <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="{{old('title')}}"
                                        placeholder="Title">
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Slug</label>
-                                <input type="text" class="form-control" id="slug" name="slug">
+                                <input type="text" class="form-control" id="slug" name="slug" value="{{old('slug')}}">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">

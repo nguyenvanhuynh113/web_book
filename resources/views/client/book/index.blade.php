@@ -1,7 +1,7 @@
 @extends('layouts.client')
 @section('content')
     <div class="container">
-        <h3 class="mt-3 mb-2">Truyện-Sách / Chi tiết / {{$book->name}}</h3>
+        <h3 class="mt-3 mb-2"><i class="bi bi-arrow-bar-right"></i>{{$book->name}}</h3>
         <div class="album py-5 bg-light">
             <div class="container">
                 <div class="row mb-2">
@@ -100,13 +100,13 @@
             </div>
         </div>
         <hr>
-        <h3 class="mt-4 mb-3">Cùng thể loại<span><a href="{{route('bookbytype',$book->id_type)}}"
+        <h3 class="mt-4 mb-3">Cùng thể loại<span><a href="{{route('bookbytype',$idtype)}}"
                                                     class="btn btn-outline-success text-lowercase"
                                                     style="float: right">view all <i
                         class="bi bi-arrow-right"></i></a> </span></h3>
         <div class="row">
             <div class="owl-carousel owl-theme">
-                @foreach($bookofcat as $item)
+                @foreach($bookoftypes as $item)
                     <div class="card shadow-sm">
                         <img class="bd-placeholder-img card-img-top" style="max-height: 300px"
                              src="{{$item->book_photo}}" role="img" aria-label="Placeholder: Thumbnail"

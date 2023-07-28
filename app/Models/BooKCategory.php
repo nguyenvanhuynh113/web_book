@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class BooKCategory extends Model
 {
     use HasFactory;
-    protected $fillable=[
-        'id_book','id_category'
+
+    protected $fillable = [
+        'id', 'id_book', 'id_category'
     ];
-    protected $primaryKey='id';
-    protected $table='book_categories';
+    protected $primaryKey = 'id';
+    protected $table = 'book_categories';
+
 }

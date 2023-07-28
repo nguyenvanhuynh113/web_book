@@ -35,7 +35,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="{{old('title')}}"
+                                <input type="text" class="form-control" id="exampleInputPassword1" name="title"
+                                       value="{{old('title')}}"
                                        placeholder="Title">
                             </div>
                             <div class="mb-3">
@@ -44,32 +45,37 @@
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Author</label>
-                                <input type="text" class="form-control"  name="author" placeholder="Author name" value="{{old('author')}}">
+                                <input type="text" class="form-control" name="author" placeholder="Author name"
+                                       value="{{old('author')}}">
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Sumary</label>
-                                <textarea class="form-control" name="content"  value="{{old('content')}}" id="content"
-                                           style="resize: none;height: 150px" placeholder="Book content summary..."></textarea>
+                                <textarea class="form-control" name="content" value="{{old('content')}}" id="content"
+                                          style="resize: none;height: 150px"
+                                          placeholder="Book content summary..."></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Book image</label>
-                                <input type="file" class="form-control" required name="book_photo" value="{{old('book_photo')}}">
+                                <input type="file" class="form-control" required name="book_photo"
+                                       value="{{old('book_photo')}}">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Category</label>
-                                <select class="form-select" aria-label="Default select example" name="id_category">
-                                    @foreach($category as $key)
-                                        <option value="{{$key->id}}">{{$key->category_name}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="mb-3 form-check form-check-inline form-control">
+                                <label class="form-label text-uppercase text-bold d-block">Category</label>
+                                @foreach($category as $key)
+                                    <input type="checkbox" name="category[]" class="btn-check" id="category_{{$key->id}}"
+                                           autocomplete="off" value="{{$key->id}}">
+                                    <label class="btn btn-outline-success mb-1"
+                                           for="category_{{$key->id}}">{{$key->category_name}}</label>
+                                @endforeach
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Type</label>
-                                <select class="form-select" aria-label="Default select example" name="id_type">
-                                    @foreach($type as $key)
-                                        <option value="{{$key->id}}">{{$key->type_name}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="mb-3 form-check form-check-inline form-control">
+                                <label class="form-label text-uppercase text-bold d-block">Type</label>
+                                @foreach($type as $key)
+                                    <input type="checkbox" name="type[]" value="{{$key->id}}" class="btn-check" id="type_{{$key->id}}"
+                                           autocomplete="off">
+                                    <label class="btn btn-outline-success mb-1"
+                                           for="type_{{$key->id}}">{{$key->type_name}}</label>
+                                @endforeach
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Status</label>

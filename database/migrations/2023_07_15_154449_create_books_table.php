@@ -20,15 +20,12 @@ return new class extends Migration
             $table->string('slug');
             $table->text('sumary');
             $table->string('book_photo');
+            $table->string('audio')->nullable();
             $table->string('author')->nullable();
             $table->integer('view')->default('0');
             $table->integer('like')->default('0');
             $table->enum('status',allowed: ['active','inactive'])->default('active');
-            $table->unsignedBigInteger('id_category');
-            $table->unsignedBigInteger('id_type');
             $table->timestamps();
-            $table->foreign('id_category')->references('id')->on('categories');
-            $table->foreign('id_type')->references('id')->on('types');
         });
     }
 

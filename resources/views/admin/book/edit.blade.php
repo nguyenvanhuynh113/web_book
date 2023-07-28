@@ -65,23 +65,27 @@
                                 <label for="exampleInputPassword1" class="form-label">Book image</label>
                                 <input type="file" class="form-control" name="book_photo" value="{{$book->book_photo}}">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Category</label>
-                                <select class="form-select" aria-label="Default select example" name="id_category">
-                                    @foreach($category as $key)
-                                        <option value="{{$key->id}}"
-                                                @if($book->id_category==$key->id) selected @endif>{{$key->category_name}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="mb-3 form-check form-check-inline form-control">
+                                <label class="form-label text-uppercase text-bold d-block">Category</label>
+                                @foreach($category as $key)
+                                    <input type="checkbox" name="category[]" class="btn-check"
+                                           id="category_{{$key->id}}"
+                                           autocomplete="off" value="{{$key->id}}"
+                                           @foreach($categories as $val) @if($key->id==$val->id) checked @endif  @endforeach>
+                                    <label class="btn btn-outline-success mb-1"
+                                           for="category_{{$key->id}}">{{$key->category_name}} </label>
+                                @endforeach
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Type</label>
-                                <select class="form-select" aria-label="Default select example" name="id_type">
-                                    @foreach($type as $key)
-                                        <option value="{{$key->id}}"
-                                                @if($book->id_type==$key->id) selected @endif>{{$key->type_name}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="mb-3 form-check form-check-inline form-control">
+                                <label class="form-label text-uppercase text-bold d-block">Type</label>
+                                @foreach($type as $key)
+                                    <input type="checkbox" name="type[]" value="{{$key->id}}" class="btn-check"
+                                           id="type_{{$key->id}}"
+                                           autocomplete="off"
+                                           @foreach($types as $val) @if($key->id==$val->id) checked @endif @endforeach>
+                                    <label class="btn btn-outline-success mb-1"
+                                           for="type_{{$key->id}}">{{$key->type_name}}</label>
+                                @endforeach
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
