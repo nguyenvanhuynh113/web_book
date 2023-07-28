@@ -8,6 +8,7 @@ use App\Models\Chapter;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TrangChuController extends Controller
@@ -33,7 +34,7 @@ class TrangChuController extends Controller
         return view('client/category/index', compact('book', 'carousel', 'type', 'cat'));
     }
 
-//    Xem sản phẩm trong một thể loại
+    //Xem sản phẩm trong một thể loại
     public function getbookbytype($id)
     {
         $carousel = DB::table('books')->where('status', 'active')->orderByDesc('created_at')->take(12)->get();
@@ -44,7 +45,7 @@ class TrangChuController extends Controller
         return view('client/type/index', compact('carousel', 'type', 'typename', 'book'));
     }
 
-//Xem chi tiết sản phẩm
+    //Xem chi chiet sach -- Tom tat tac gia tac pham --- Danh sach chuong
     public function bookdetail($id)
     {
         $books = Book::find($id);
@@ -98,7 +99,7 @@ class TrangChuController extends Controller
             ->join('book_types', 'books.id', '=', 'book_types.id_book')
             ->join('types', 'book_types.id_type', '=', 'types.id')
             ->where(function ($query) use ($tukhoa) {
-                $query->where('books.name', 'LIKE', '%' . $tukhoa . '%')
+                $query->where('books.name', 'LIKE', $tukhoa . '%')
                     ->orWhere('categories.category_name', 'LIKE', '%' . $tukhoa . '%')
                     ->orWhere('types.type_name', 'LIKE', '%' . $tukhoa . '%')
                     ->orWhere('books.author', 'LIKE', '%' . $tukhoa . '%');
@@ -113,43 +114,37 @@ class TrangChuController extends Controller
     // Tìm kiếm thông minh bằng ajax query
     public function searchSuggestions(Request $request)
     {
-        $query = $request->get('query');
-        $suggestions = DB::table('books')->join('categories', 'categories.id', '=', 'books.id_category')
-            ->join('types', 'types.id', '=', 'books.id_type')
-            ->where('name', 'LIKE', '%' . $query . '%')
-            ->orWhere('category_name', 'LIKE', '%' . $query . '%')
-            ->orWhere('type_name', 'LIKE', '%' . $query . '%')
-            ->orWhere('author', 'LIKE', '%' . $query . '%')
-            ->pluck('books.name'); // Lấy tên các sản phẩm phù hợp để gợi ý
+        $tukhoa = $request->get('query');
+        $suggestions = DB::table('books')->join('book_categories', 'books.id', '=', 'book_categories.id_book')
+            ->join('categories', 'book_categories.id_category', '=', 'categories.id')
+            ->join('book_types', 'books.id', '=', 'book_types.id_book')
+            ->join('types', 'book_types.id_type', '=', 'types.id')
+            ->where(function ($query) use ($tukhoa) {
+                $query->where('books.name', 'LIKE', $tukhoa . '%')
+                    ->orWhere('categories.category_name', 'LIKE', '%' . $tukhoa . '%')
+                    ->orWhere('types.type_name', 'LIKE', '%' . $tukhoa . '%')
+                    ->orWhere('books.author', 'LIKE', '%' . $tukhoa . '%');
+            })->distinct()->pluck('categories.category_name'); // Lấy tên các sản phẩm phù hợp để gợi ý
         return response()->json($suggestions);
     }
-
-    public function like($id)
-    {
-        $book = DB::table('books')->where('id', '=', $id)->where('status', 'active')->first();
-        DB::table('books')->where('id', '=', $id)->update([
-            'like' => $book->like + '1'
-        ]);
-        return redirect()->back()->with('status', 'Liked');
-    }
-
+    //Xem thong tin nguoi dung
     public function profile($id)
     {
         $users = DB::table('users')->where('id', $id)->first();
         return view('client/user/profile', compact('users'));
     }
 
+    // Cap nhat hinh anh cua nguoi dung
     public function capnhatuser(Request $request, $id)
     {
-        $data=DB::table('users')->where('id',$id)->first();
+        $data = DB::table('users')->where('id', $id)->first();
         if ($request->hasFile('file')) {
             $image = $request->file('file');
             $imageName = $image->getClientOriginalName();
             $image->move(public_path('images'), $imageName);
             $url = "http://127.0.0.1:8000/images/" . $imageName;
-        }
-        else{
-            $url=$data->user_photo;
+        } else {
+            $url = $data->user_photo;
         }
         DB::table('users')->where('id', $id)->update([
             'user_photo' => $url
@@ -157,4 +152,27 @@ class TrangChuController extends Controller
         return redirect()->back()->with('status', 'Cập nhật ảnh đại diện thành công');
     }
 
+    // Theo doi truyen sach
+    public function theodoi($id)
+    {
+        if (!Auth::check()) {
+            return redirect()->back()->with('status', 'Register or Login now !!');
+        } else {
+            $user = User::find(Auth::user()->id);
+            $user->likes()->attach($id);
+            return redirect()->back()->with('status', 'Followed books success !!');
+        }
+    }
+
+    // Bo theo doi truyen sach
+    public function botheodoi($id)
+    {
+        if (!Auth::check()) {
+            return redirect()->back()->with('status', 'Register or Login now !!');
+        } else {
+            $user = User::find(Auth::user()->id);
+            $user->likes()->detach($id);
+            return redirect()->back()->with('status', 'Unfollowed books success !!');
+        }
+    }
 }

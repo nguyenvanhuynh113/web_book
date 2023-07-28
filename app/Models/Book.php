@@ -12,12 +12,13 @@ class Book extends Model
     protected $fillable = [
         'id', 'name', 'title', 'slug', 'sumary',
         'book_photo',
-        'author', 'status', 'view', 'like','audio'
+        'author', 'status', 'view', 'like'
     ];
-
+    protected $table='books';
+    protected $primaryKey='id';
     public function chapter()
     {
-        return $this->hasMany(Chapter::class,'id');
+        return $this->hasMany(Chapter::class, 'id');
     }
 
     public function categories()
@@ -30,8 +31,8 @@ class Book extends Model
         return $this->belongsToMany(Type::class, 'book_types', 'id_book', 'id_type');
     }
 
-    public function like()
+    public function likes()
     {
-        return $this->belongsToMany(Like::class);
+        return $this->belongsToMany(User::class, 'likes', 'id_user', 'id_book');
     }
 }

@@ -45,8 +45,6 @@ class BookController extends Controller
     {
         $check = DB::table('books')->where('name', $request->name)->first();
         if (is_null($check)) {
-            $audioUrl = $this->convertTextToSpeech($request->input('content'));
-            dd($audioUrl);
             if ($request->hasFile('book_photo')) {
                 $image = $request->file('book_photo');
                 $imageName = $image->getClientOriginalName();
@@ -60,7 +58,6 @@ class BookController extends Controller
                 'author' => $request->author,
                 'sumary' => $request->input('content'),
                 'book_photo' => $url,
-                'audio' => $audioUrl,
                 'status' => $request->status,
             ]);
             $book->categories()->attach($request->category);
@@ -71,21 +68,6 @@ class BookController extends Controller
         }
     }
 
-    private function convertTextToSpeech($text)
-    {
-        // Gọi MaryTTS API (hoặc dịch vụ Text-to-Speech khác)
-        // Giả sử hàm này chuyển đổi văn bản thành giọng nói tiếng Việt và trả về URL tệp audio
-        // Ví dụ:
-        $apiEndpoint = "https://mary.dfki.de:59125/process?INPUT_TYPE=TEXT&AUDIO=WAVE_FILE&LOCALE=vi_VN&INPUT_TEXT=" . urlencode($text);
-        $client = new Client();
-        $response = $client->get($apiEndpoint);
-        $audioData = $response->getBody()->getContents();
-        $tempFileName = time() . '_speech.wav';
-        file_put_contents(public_path($tempFileName), $audioData);
-        $audioUrl = asset($tempFileName);
-        // Trong ví dụ này, hãy giả sử chúng ta trả về URL giả lập để không thực hiện thực tế
-        return 'http://example.com/audio/' . $audioUrl . '.wav';
-    }
 
     /**
      * Display the specified resource.
@@ -161,6 +143,7 @@ class BookController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
+    // Xoa mot cuon sach -- khong the xoa khi sach co chapter
     public function destroy($id)
     {
         $book = Book::with('chapter')->find($id);
@@ -173,6 +156,7 @@ class BookController extends Controller
         return redirect()->back()->with('status', 'Deleted book sucess');
     }
 
+    //Lay tat ca chapter trong sach truyen
     public function getchapter($id)
     {
         $chapter = DB::table('chapters')->leftJoin('books', 'books.id', '=', 'chapters.id_book')

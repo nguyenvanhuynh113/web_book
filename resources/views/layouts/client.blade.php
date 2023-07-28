@@ -141,8 +141,11 @@
                                             class="bi bi-box-arrow-in-right"></i>
                                         {{ __('Logout') }}
                                     </a>
-                                    <a class="dropdown-item" href="{{route('profile', Auth::user()->id)}}"> <i class="bi bi-person"></i> Profile</a>
-                                    <a class="dropdown-item" href=""> <i class="bi bi-heart"></i> Theo dõi</a>
+                                    <a class="dropdown-item" href="{{route('profile', Auth::user()->id)}}"> <i
+                                            class="bi bi-person"></i> Profile</a>
+                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#myModal"><i
+                                            class="bi bi-heart"></i> Theo dõi</a>
+                                    <!-- Modal thông báo -->
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                           class="d-none">
                                         @csrf
@@ -163,6 +166,48 @@
         </nav>
     </div>
     <main class="py-4">
+        @php
+            if(\Illuminate\Support\Facades\Auth::check())
+                {
+                    $user=\App\Models\User::find(\Illuminate\Support\Facades\Auth::user()->id);
+                    $theodoi=$user->likes()->where('status', 'active')->orderByDesc('created_at')->paginate(5);
+                    $count_theodoi=$theodoi->count();
+                }
+        @endphp
+        @guest
+        @else
+            <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="myModalLabel">Danh sách theo dõi - Số lượng
+                                : {{$count_theodoi}}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <ul class="list-group">
+                                @foreach($theodoi as $item => $val)
+                                    <li class="list-group-item mb-2">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <img src="{{$val->book_photo}}" alt="Sản phẩm 1"
+                                                     class="img-fluid rounded"  style="max-height: 100px;max-width: 70px">
+                                            </div>
+                                            <div class="col-md-9">
+                                                <h4 class="mb-3"><a href="{{route('xemsach',$val->id)}}"style="text-decoration: none"
+                                                    class="text-success">{{$val->name}}</a></h4>
+                                                <p>{!! \Illuminate\Support\Str::limit($val->sumary,50) !!}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                                <!-- Thêm các mục sản phẩm khác vào đây -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endguest
         @yield('content')
     </main>
 </div>

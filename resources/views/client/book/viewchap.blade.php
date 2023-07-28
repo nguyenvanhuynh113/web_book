@@ -1,15 +1,110 @@
 @extends('layouts.client')
+<style xmlns="">
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        max-width: 600px;
+    }
+
+    #article-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .slider-container {
+        margin-bottom: 10px;
+    }
+</style>
 @section('content')
     <div class="container">
-        <h3 class="mt-3 text-uppercase"><i class="bi bi-arrow-right"></i> <a href="{{route('xemsach',$book->id)}}"
-                                                                             style="text-decoration: none;"> {{$book->name}} </a>
-            / {{$chapter->name}}</h3>
-        <div class="container">
-            <div class="card-body">
-                <p>{!! $chapter->content !!}</p>
+        <h3 class="mt-3 text-uppercase"><i class="bi bi-arrow-right"></i>
+            <a href="{{route('xemsach',$book->id)}}"
+               style="text-decoration: none;"> {{$book->name}} </a>/ {{$chapter->name}}</h3>
+        <div class="container py-4">
+            <div class="row">
+                <div class="btn-container">
+                    <button id="readButton" class="btn btn-outline-success ms-auto mt-3" onclick="readArticle()">
+                        <i class="bi bi-play"></i>
+                    </button>
+                    <button id="pauseButton" class="btn btn-outline-success ms-auto mt-3 " onclick="pauseSpeech()">
+                        <i class="bi bi-pause"></i>
+                    </button>
+                    <button id="resumeButton" class="btn btn-outline-success ms-auto mt-3" onclick="resumeSpeech()">
+                        <i class="bi bi-skip-forward"></i>
+                    </button>
+                    <button id="stopButton" class="btn btn-outline-success ms-auto mt-3" onclick="stopSpeech()"
+                            disabled>
+                        <i class="bi bi-stop"></i>
+                    </button>
+                </div>
+                <div class="col-md-12">
+                    <div id="article-container">
+                        <p>{!! $chapter->content !!}</p>
+                    </div>
+                </div>
             </div>
         </div>
+        <script src='https://code.responsivevoice.org/responsivevoice.js?key=AN1jc0tp'/>
+        </script>
+        <script>
+            var isSpeaking = false;
 
+            function readArticle() {
+                var articleContent = document.getElementById("article-container").textContent;
+                var rate = 1;
+                var volume = 1;
+
+                responsiveVoice.cancel(); // Dừng giọng nói trước khi bắt đầu
+
+                // Tổng hợp giọng nói cho nội dung của phần tử "article-container"
+                responsiveVoice.speak(articleContent, 'Vietnamese Female', {
+                    rate: rate,
+                    volume: volume,
+                    onstart: function () {
+                        isSpeaking = true;
+                        document.getElementById('stopButton').disabled = false;
+                        document.getElementById('resumeButton').disabled = true;
+                        document.getElementById('pauseButton').disabled = false;
+                    },
+                    onend: function () {
+                        isSpeaking = false;
+                        document.getElementById('stopButton').disabled = true;
+                    }
+                });
+            }
+
+            function stopSpeech() {
+                responsiveVoice.cancel(); // Dừng giọng nói
+                isSpeaking = false;
+                document.getElementById('stopButton').disabled = true;
+                document.getElementById('pauseButton').disabled = true;
+                document.getElementById('resumeButton').disabled = true;
+            }
+
+            function pauseSpeech() {
+                responsiveVoice.pause(); // tam dừng giọng nói
+                isSpeaking = false;
+                document.getElementById('pauseButton').disabled = true;
+                document.getElementById('resumeButton').disabled = false;
+                document.getElementById('readButton').disabled = true;
+            }
+
+            function resumeSpeech() {
+                responsiveVoice.resume();// tiep tuc giong noi
+                document.getElementById('pauseButton').disabled = false;
+                document.getElementById('resumeButton').disabled = true;
+                document.getElementById('readButton').disabled = false;
+            }
+        </script>
         <!-- Liên kết "Next" để chuyển đến chương tiếp theo -->
         <div class="row mt-4 mb-4 justify-content-center align-items-center">
             <div class="col-auto">
@@ -68,5 +163,6 @@
             @endforeach
         </div>
         <hr>
-    @include('layouts.client.footer')
+        @include('layouts.client.footer')
+    </div>
 @endsection

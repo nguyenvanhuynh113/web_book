@@ -1,5 +1,24 @@
 @extends('layouts.client')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="container">
         <h3 class="mt-3 mb-2"><i class="bi bi-arrow-bar-right"></i>{{$book->name}}</h3>
         <div class="album py-5 bg-light">
@@ -35,10 +54,41 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-auto mt-3 mb-3">
-                            <a class="btn btn-outline-success"><i class="bi bi-eye-fill"></i> {{$book->view}}</a>
-                            <a class="btn btn-outline-success" href="{{route('like',$book->id)}}"><i class="bi bi-heart-fill"></i> {{$book->like}}</a>
+                        <div class="row mt-2 mb-5">
+                            <div class="col-auto">
+                                <a class="btn btn-outline-success"><i
+                                        class="bi bi-eye-fill"> Lượt xem :</i> {{$book->view}}</a>
+                            </div>
+                            <div class="col-md-auto">
+                                @php
+                                    if (\Illuminate\Support\Facades\Auth::check())
+                                        {
+                                            $theodoi=\Illuminate\Support\Facades\DB::table('likes')->where('id_user','=',\Illuminate\Support\Facades\Auth::user()->id)
+                                            ->where('id_book','=',$book->id)->get();
+                                        }
+                                    $count=$theodoi->count();
+                                    $likes=\Illuminate\Support\Facades\DB::table('likes')->get();
+                                    $countlikes=$likes->count();
+                                @endphp
+                                @if($count>0)
+                                    <form action="{{route('botheodoi',$book->id)}}" method="post" enctype="multipart/form-data">
+                                       @method('delete')
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-success"><i
+                                                class="bi bi-bookmark-x"> Bỏ yêu thích</i></button>
+                                    </form>
+
+                                @else
+                                    <form action="{{route('theodoi',$book->id)}}" method="POST"
+                                          enctype="multipart/form-data">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-success"><i
+                                                class="bi bi-bookmark-heart"></i> Lượt yêu thích {{$countlikes}}</button>
+                                    </form>
+                                @endif
+                            </div>
                         </div>
+
                         {{--Kiểm tra xem có chapter nào trong sách không--}}
                         @php $count=count($chapter) @endphp
                         <div class="col-auto mb-2">
