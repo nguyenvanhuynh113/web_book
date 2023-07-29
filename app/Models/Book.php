@@ -20,7 +20,6 @@ class Book extends Model
     {
         return $this->hasMany(Chapter::class, 'id');
     }
-
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'book_categories', 'id_book', 'id_category');
@@ -34,5 +33,9 @@ class Book extends Model
     public function likes()
     {
         return $this->belongsToMany(User::class, 'likes', 'id_user', 'id_book');
+    }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class,'book_tags','id_tag','id_book');
     }
 }

@@ -15,9 +15,9 @@ class Category extends Model
     protected $primaryKey = 'id';
     protected $table = 'categories';
 
-    public function bookcategory()
+    public function books()
     {
-        return $this->belongsToMany(BooK::class,'book_categories','id_book','id_category');
+        return $this->belongsToMany(Book::class, 'book_categories', 'id_category', 'id_book');
     }
 
 }

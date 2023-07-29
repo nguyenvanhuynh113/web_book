@@ -155,13 +155,7 @@
         <div class="fb-comments" data-href="{{\Illuminate\Support\Facades\URL::current()}}" data-width="100%"
              data-numposts="10"></div>
         <hr>
-        <h4 class="mt-2 mb-3">The Loai Truyen-Sach</h4>
-        <div class="d-inline-flex">
-            @foreach($type as $val)
-                <a href="{{route('bookbytype',$val->id)}}"
-                   class="btn btn-outline-secondary m-1">{{$val->type_name}}</a>
-            @endforeach
-        </div>
+        @include('layouts.client.theloai')
         <hr>
         @include('layouts.client.footer')
     </div>

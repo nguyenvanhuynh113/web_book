@@ -3,7 +3,24 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .button-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
 
+        .btn {
+            display: block;
+            text-align: center;
+            border-radius: 8px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+    </style>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -191,11 +208,13 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <img src="{{$val->book_photo}}" alt="Sản phẩm 1"
-                                                     class="img-fluid rounded"  style="max-height: 100px;max-width: 70px">
+                                                     class="img-fluid rounded"
+                                                     style="max-height: 100px;max-width: 70px">
                                             </div>
                                             <div class="col-md-9">
-                                                <h4 class="mb-3"><a href="{{route('xemsach',$val->id)}}"style="text-decoration: none"
-                                                    class="text-success">{{$val->name}}</a></h4>
+                                                <h4 class="mb-3"><a href="{{route('xemsach',$val->id)}}"
+                                                                    style="text-decoration: none"
+                                                                    class="text-success">{{$val->name}}</a></h4>
                                                 <p>{!! \Illuminate\Support\Str::limit($val->sumary,50) !!}</p>
                                             </div>
                                         </div>
@@ -217,23 +236,36 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
 <script src="{{ asset('js/owl.carousel.min.js') }}"></script>
 <script>
+    // Chờ cho đến khi toàn bộ tài liệu HTML đã được tải xong và sẵn sàng để sử dụng
     $(document).ready(function () {
+        // Chọn tất cả các phần tử có lớp 'owl-carousel' và áp dụng plugin Owl Carousel lên chúng
         $('.owl-carousel').owlCarousel({
+            // Vòng lặp vô hạn trong carousel, khi đến cuối danh sách thì quay lại đầu
             loop: true,
+            // Khoảng cách giữa các mục trong carousel
             margin: 6,
+            // Hiển thị nút điều hướng (nút trước và nút sau) để chuyển đổi giữa các mục
             nav: true,
+            // Hiển thị chấm chỉ thị để biểu thị vị trí hiện tại trong carousel
             dots: true, // Bật hiển thị dots
+            // Tự động chuyển đổi giữa các mục trong carousel
             autoplay: true,
+            // Thời gian chờ giữa các lần chuyển đổi tự động (đơn vị: miliseconds)
             autoplayTimeout: 3000,
+            // Tạm dừng tự động chuyển đổi khi người dùng di chuột qua carousel
             autoplayHoverPause: true,
+            // Thiết lập số lượng mục hiển thị tại các kích thước màn hình khác nhau
             responsive: {
                 0: {
+                    // Khi màn hình nhỏ hơn hoặc bằng 0px, hiển thị 2 mục trên mỗi slide
                     items: 2
                 },
                 600: {
+                    // Khi màn hình nhỏ hơn hoặc bằng 600px, hiển thị 4 mục trên mỗi slide
                     items: 4
                 },
                 1000: {
+                    // Khi màn hình nhỏ hơn hoặc bằng 1000px, hiển thị 6 mục trên mỗi slide
                     items: 6
                 }
             }
@@ -241,38 +273,104 @@
     });
 </script>
 
-<script>
-    function showSuggestions(suggestions) {
-        var suggestionsList = $('#searchSuggestionsList');
-        suggestionsList.empty();
 
+<!-- JavaScript -->
+<script>
+    // Hàm hiển thị các gợi ý tìm kiếm
+    function showSuggestions(suggestions) {
+        // Lấy phần tử HTML có id="searchSuggestionsList" để hiển thị các gợi ý
+        var suggestionsList = $('#searchSuggestionsList');
+        suggestionsList.empty(); // Làm sạch phần tử để chuẩn bị hiển thị gợi ý mới
+
+        // Lấy giá trị từ ô tìm kiếm và chuẩn hóa để so sánh (bỏ dấu và đưa về chữ thường)
+        var userInput = $('#searchInput').val().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        // Mảng để lưu trữ các gợi ý duy nhất
+        var uniqueSuggestions = [];
+
+        // Duyệt qua từng gợi ý trong danh sách 'suggestions'
         $.each(suggestions, function (index, suggestion) {
-            var listItem = $('<li class="list-group-item"></li>');
-            listItem.text(suggestion);
-            suggestionsList.append(listItem);
+            // Chuẩn hóa các giá trị gợi ý để so sánh (bỏ dấu và đưa về chữ thường)
+            var category = suggestion.category_name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            var type = suggestion.type_name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            var book = suggestion.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            var author = suggestion.author.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+            // Kiểm tra xem chuỗi người dùng nhập bắt đầu gần giống với các gợi ý và không trùng với gợi ý
+            if (
+                (category.startsWith(userInput) && category !== userInput) ||
+                (type.startsWith(userInput) && type !== userInput) ||
+                (book.startsWith(userInput) && book !== userInput) ||
+                (author.startsWith(userInput) && author !== userInput)
+            ) {
+                // Nếu gợi ý không tồn tại trong mảng duy nhất, thì hiển thị và thêm vào mảng duy nhất
+                if (!uniqueSuggestions.includes(suggestion.category_name)) {
+                    if (category) {
+                        var categoryItem = $('<li class="list-group-item"></li>');
+                        categoryItem.text(suggestion.category_name);
+                        suggestionsList.append(categoryItem);
+                        uniqueSuggestions.push(suggestion.category_name);
+                    }
+                }
+
+                if (!uniqueSuggestions.includes(suggestion.type_name)) {
+                    if (type) {
+                        var typeItem = $('<li class="list-group-item"></li>');
+                        typeItem.text(suggestion.type_name);
+                        suggestionsList.append(typeItem);
+                        uniqueSuggestions.push(suggestion.type_name);
+                    }
+                }
+
+                if (!uniqueSuggestions.includes(suggestion.name)) {
+                    if (book) {
+                        var bookItem = $('<li class="list-group-item"></li>');
+                        bookItem.text(suggestion.name);
+                        suggestionsList.append(bookItem);
+                        uniqueSuggestions.push(suggestion.name);
+                    }
+                }
+
+                if (!uniqueSuggestions.includes(suggestion.author)) {
+                    if (author) {
+                        var authorItem = $('<li class="list-group-item"></li>');
+                        authorItem.text(suggestion.author);
+                        suggestionsList.append(authorItem);
+                        uniqueSuggestions.push(suggestion.author);
+                    }
+                }
+            }
         });
     }
 
     $(document).ready(function () {
+        // Lắng nghe sự kiện 'keyup' trên ô tìm kiếm với id="searchInput"
         $('#searchInput').on('keyup', function () {
             var query = $(this).val();
+            // Gửi yêu cầu AJAX để lấy danh sách các gợi ý phù hợp từ server
             $.ajax({
                 url: '/search_suggestions',
                 method: 'GET',
                 data: {query: query},
                 dataType: 'json',
                 success: function (response) {
+                    // Khi nhận được phản hồi thành công, hiển thị các gợi ý bằng cách gọi hàm showSuggestions(response);
                     showSuggestions(response);
                 }
             });
         });
+        // Lắng nghe sự kiện 'click' trên các phần tử 'li' trong 'searchSuggestionsList'
         $('#searchSuggestionsList').on('click', '.list-group-item', function () {
+            // Khi người dùng chọn một gợi ý, đưa giá trị của gợi ý đó vào ô tìm kiếm và làm sạch danh sách gợi ý
             var selectedSuggestion = $(this).text();
             $('#searchInput').val(selectedSuggestion);
             $('#searchSuggestionsList').empty();
         });
     });
 </script>
+
+
+
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v17.0"
         nonce="XShbigi6"></script>

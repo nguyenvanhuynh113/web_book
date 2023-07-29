@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
 use App\Models\Book;
+use App\Models\Chapter;
+use App\Models\Tag;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -67,7 +69,6 @@ class BookController extends Controller
             return redirect()->back()->with('error', 'Book name already exist');
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -146,14 +147,16 @@ class BookController extends Controller
     // Xoa mot cuon sach -- khong the xoa khi sach co chapter
     public function destroy($id)
     {
-        $book = Book::with('chapter')->find($id);
-        if ($book) {
-            return redirect()->back()->with('error', 'Sách đang hoạt động, Không thể xóa');
+        $books = DB::table('chapters')->where('id_book', $id)->first();
+        $book = Book::find($id);
+        if (is_null($books)) {
+            DB::table('likes')->where('id_book', $id)->delete();
+            $book->types()->detach();
+            $book->categories()->detach();
+            $book->delete();
+            return redirect('book')->with('status', 'Deleted book sucess');
         }
-        $book->types()->detach();
-        $book->categories()->detach();
-        $book->delete();
-        return redirect()->back()->with('status', 'Deleted book sucess');
+        return redirect()->back()->with('error', 'Sách đang hoạt động, Không thể xóa');
     }
 
     //Lay tat ca chapter trong sach truyen

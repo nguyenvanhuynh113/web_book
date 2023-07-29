@@ -30,12 +30,12 @@
                                         <div class="btn-group" role="group">
                                             <!-- Button to trigger the modal -->
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
-                                                    data-bs-target="#userModal">
+                                                    data-bs-target="#userModal_{{$val->id}}">
                                                 View User
                                             </button>
 
                                             <!-- Modal -->
-                                            <div class="modal fade" id="userModal" tabindex="-1"
+                                            <div class="modal fade" id="userModal_{{$val->id}}" tabindex="-1"
                                                  aria-labelledby="userModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">

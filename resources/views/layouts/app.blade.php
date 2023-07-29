@@ -87,6 +87,16 @@
                                     <li><a class="dropdown-item" href="{{route('user.index')}}">List users</a></li>
                                 </ul>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    Blogs
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                    <li><a class="dropdown-item" href="{{route('category.index')}}">List blogs</a></li>
+                                    <li><a class="dropdown-item" href="{{route('category.create')}}">Add blogs</a></li>
+                                </ul>
+                            </li>
                         </ul>
                         <form class="d-flex">
                             <input class="form-control me-2 col-md-6 f" type="search" placeholder="Search" aria-label="Search">

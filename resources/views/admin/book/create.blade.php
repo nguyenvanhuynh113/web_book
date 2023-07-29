@@ -59,10 +59,12 @@
                                 <input type="file" class="form-control" required name="book_photo"
                                        value="{{old('book_photo')}}">
                             </div>
+
                             <div class="mb-3 form-check form-check-inline form-control">
                                 <label class="form-label text-uppercase text-bold d-block">Category</label>
                                 @foreach($category as $key)
-                                    <input type="checkbox" name="category[]" class="btn-check" id="category_{{$key->id}}"
+                                    <input type="checkbox" name="category[]" class="btn-check"
+                                           id="category_{{$key->id}}"
                                            autocomplete="off" value="{{$key->id}}">
                                     <label class="btn btn-outline-success mb-1"
                                            for="category_{{$key->id}}">{{$key->category_name}}</label>
@@ -71,7 +73,8 @@
                             <div class="mb-3 form-check form-check-inline form-control">
                                 <label class="form-label text-uppercase text-bold d-block">Type</label>
                                 @foreach($type as $key)
-                                    <input type="checkbox" name="type[]" value="{{$key->id}}" class="btn-check" id="type_{{$key->id}}"
+                                    <input type="checkbox" name="type[]" value="{{$key->id}}" class="btn-check"
+                                           id="type_{{$key->id}}"
                                            autocomplete="off">
                                     <label class="btn btn-outline-success mb-1"
                                            for="type_{{$key->id}}">{{$key->type_name}}</label>
