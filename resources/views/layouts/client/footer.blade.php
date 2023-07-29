@@ -1,5 +1,5 @@
 <!-- Footer -->
-<footer class="">
+<footer class="footer">
     <div class="row">
         <div class="col-md-3">
             <p class="footer-logo">TruyenSach.com</p>

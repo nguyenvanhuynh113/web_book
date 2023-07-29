@@ -1,7 +1,26 @@
 @extends('layouts.client')
 @section('content')
+    @if (session('status'))
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
+    @if (session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="container">
-        <h3 class="mt-3 mb-2">Truyện-Sách / Chi tiết / {{$book->name}}</h3>
+        <h3 class="mt-3 mb-2"><i class="bi bi-arrow-bar-right"></i>{{$book->name}}</h3>
         <div class="album py-5 bg-light">
             <div class="container">
                 <div class="row mb-2">
@@ -35,10 +54,54 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="col-auto mt-3 mb-3">
-                            <a class="btn btn-outline-success"><i class="bi bi-eye-fill"></i> {{$book->view}}</a>
-                            <a class="btn btn-outline-success" href="{{route('like',$book->id)}}"><i class="bi bi-heart-fill"></i> {{$book->like}}</a>
+                        <div class="row mt-2 mb-5">
+                            <div class="col-auto">
+                                <a class="btn btn-outline-success"><i
+                                        class="bi bi-eye-fill"> Lượt xem :</i> {{$book->view}}</a>
+                            </div>
+                            <div class="col-md-auto">
+                                @php
+                                    if (\Illuminate\Support\Facades\Auth::check())
+                                        {
+                                            $theodoi=\Illuminate\Support\Facades\DB::table('likes')->where('id_user','=',\Illuminate\Support\Facades\Auth::user()->id)
+                                            ->where('id_book','=',$book->id)->get();
+                                            $count=$theodoi->count();
+
+                                        }
+                                    $likes=\Illuminate\Support\Facades\DB::table('likes')->get();
+                                    $countlikes=$likes->count();
+                                @endphp
+                                @guest
+                                    <form action="{{route('theodoi',$book->id)}}" method="POST"
+                                          enctype="multipart/form-data">
+                                        @csrf
+                                        <button type="submit" class="btn btn-outline-success"><i
+                                                class="bi bi-bookmark-heart"></i> Lượt yêu thích {{$countlikes}}
+                                        </button>
+                                    </form>
+                                @else
+                                    @if($count>0)
+                                        <form action="{{route('botheodoi',$book->id)}}" method="post"
+                                              enctype="multipart/form-data">
+                                            @method('delete')
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success"><i
+                                                    class="bi bi-bookmark-x"> Bỏ yêu thích</i></button>
+                                        </form>
+
+                                    @else
+                                        <form action="{{route('theodoi',$book->id)}}" method="POST"
+                                              enctype="multipart/form-data">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success"><i
+                                                    class="bi bi-bookmark-heart"></i> Lượt yêu thích {{$countlikes}}
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endguest
+                            </div>
                         </div>
+
                         {{--Kiểm tra xem có chapter nào trong sách không--}}
                         @php $count=count($chapter) @endphp
                         <div class="col-auto mb-2">
@@ -100,42 +163,9 @@
             </div>
         </div>
         <hr>
-        <h3 class="mt-4 mb-3">Cùng thể loại<span><a href="{{route('bookbytype',$book->id_type)}}"
-                                                    class="btn btn-outline-success text-lowercase"
-                                                    style="float: right">view all <i
-                        class="bi bi-arrow-right"></i></a> </span></h3>
-        <div class="row">
-            <div class="owl-carousel owl-theme">
-                @foreach($bookofcat as $item)
-                    <div class="card shadow-sm">
-                        <img class="bd-placeholder-img card-img-top" style="max-height: 300px"
-                             src="{{$item->book_photo}}" role="img" aria-label="Placeholder: Thumbnail"
-                             preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                        <rect width="100%" max-height="300px" fill="#55595c"></rect>
-                        </img>
-                        <div class="card-body">
-                            <p class="card-text text-success" style="height: 40px">{{$item->name}}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <a type="button" class="btn btn-sm btn-outline-secondary"
-                                       href="{{route('xemsach',$item->id)}}">Detail</a>
-                                </div>
-                                <small class="text-muted"><i class="bi bi-eye"></i> 19999</small>
-                                <small class="text-muted"><i class="bi bi-heart"></i> 19999</small>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
+       @include('layouts.client.cungtheloai')
         <hr>
-        <h4 class="mt-2 mb-3"> Thể loại</h4>
-        <div class="d-inline-flex">
-            @foreach($type as $val)
-                <a href="{{route('bookbytype',$val->id)}}"
-                   class="btn btn-outline-secondary m-1">{{$val->type_name}}</a>
-            @endforeach
-        </div>
+        @include('layouts.client.theloai')
         <hr>
         @include('layouts.client.footer')
     </div>

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
 use App\Models\Book;
+use App\Models\Chapter;
+use App\Models\Tag;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,7 +53,7 @@ class BookController extends Controller
                 $image->move(public_path('images'), $imageName);
                 $url = "http://127.0.0.1:8000/images/" . $imageName;
             }
-            Book::create([
+            $book = Book::create([
                 'name' => $request->name,
                 'title' => $request->title,
                 'slug' => $request->slug,
@@ -58,14 +61,13 @@ class BookController extends Controller
                 'sumary' => $request->input('content'),
                 'book_photo' => $url,
                 'status' => $request->status,
-                'id_category' => $request->id_category,
-                'id_type' => $request->id_type
             ]);
+            $book->categories()->attach($request->category);
+            $book->types()->attach($request->type);
             return redirect()->back()->with('status', 'Add book sucess');
         } else {
             return redirect()->back()->with('error', 'Book name already exist');
         }
-
     }
 
     /**
@@ -89,9 +91,12 @@ class BookController extends Controller
     {
         //
         $book = DB::table('books')->where('id', $id)->first();
+        $id = Book::find($id);
+        $categories = $id->categories;
+        $types = $id->types;
         $category = DB::table('categories')->get();
         $type = DB::table('types')->get();
-        return view('admin/book/edit', compact('category', 'book', 'type'));
+        return view('admin/book/edit', compact('category', 'book', 'type', 'categories', 'types'));
     }
 
     /**
@@ -105,7 +110,7 @@ class BookController extends Controller
     {
         //
         $check = DB::table('books')->where('name', $request->name)->where('id', '!=', $id)->first();
-        $book = DB::table('books')->where('id', $id)->first();
+        $books = DB::table('books')->where('id', $id)->first();
         if (is_null($check)) {
             if ($request->hasFile('book_photo')) {
                 $image = $request->file('book_photo');
@@ -113,8 +118,9 @@ class BookController extends Controller
                 $image->move(public_path('images'), $imageName);
                 $url = "http://127.0.0.1:8000/images/" . $imageName;
             } else {
-                $url = $book->book_photo;
+                $url = $books->book_photo;
             }
+            $book = Book::find($id);
             DB::table('books')->where('id', $id)->update([
                 'name' => $request->name,
                 'title' => $request->title,
@@ -123,9 +129,9 @@ class BookController extends Controller
                 'sumary' => $request->input('content'),
                 'book_photo' => $url,
                 'status' => $request->status,
-                'id_category' => $request->id_category,
-                'id_type' => $request->id_type
             ]);
+            $book->categories()->sync($request->category);
+            $book->types()->sync($request->type);
             return redirect()->back()->with('status', 'Updated book sucess');
         } else {
             return redirect()->back()->with('error', 'Book name already exist');
@@ -138,18 +144,28 @@ class BookController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
+    // Xoa mot cuon sach -- khong the xoa khi sach co chapter
     public function destroy($id)
     {
-        Book::destroy($id);
-        return redirect()->back()->with('status', 'Deleted book sucess');
+        $books = DB::table('chapters')->where('id_book', $id)->first();
+        $book = Book::find($id);
+        if (is_null($books)) {
+            DB::table('likes')->where('id_book', $id)->delete();
+            $book->types()->detach();
+            $book->categories()->detach();
+            $book->delete();
+            return redirect('book')->with('status', 'Deleted book sucess');
+        }
+        return redirect()->back()->with('error', 'Sách đang hoạt động, Không thể xóa');
     }
 
+    //Lay tat ca chapter trong sach truyen
     public function getchapter($id)
     {
-        $chapter=DB::table('chapters')->leftJoin('books','books.id','=','chapters.id_book')
+        $chapter = DB::table('chapters')->leftJoin('books', 'books.id', '=', 'chapters.id_book')
             ->select('chapters.*')
-            ->where('books.id',$id)->get();
-        return view('admin/chapter/index',compact('chapter'));
+            ->where('books.id', $id)->get();
+        return view('admin/chapter/index', compact('chapter'));
     }
 
 }

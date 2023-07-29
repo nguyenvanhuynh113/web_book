@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BooKCategory extends Model
+class Like extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'id', 'id_book', 'id_category'
+        'id_book', 'id_user'
     ];
     protected $primaryKey = 'id';
-    protected $table = 'book_categories';
-
+    protected $table = 'likes';
 }

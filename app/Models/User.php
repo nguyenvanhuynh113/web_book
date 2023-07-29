@@ -43,6 +43,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    protected $primaryKey='id';
-    protected $table='users';
+    protected $primaryKey = 'id';
+    protected $table = 'users';
+
+    public function likes()
+    {
+        return $this->belongsToMany(Book::class, 'likes', 'id_user', 'id_book');
+    }
 }

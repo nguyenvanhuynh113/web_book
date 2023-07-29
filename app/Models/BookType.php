@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class BookType extends Model
 {
     use HasFactory;
-    protected $fillable=[
-      'id_book','id_type'
+
+    protected $fillable = [
+        'id_book', 'id_type'
     ];
-    protected $primaryKey='id';
-    protected $table='book_types';
+    protected $primaryKey = 'id';
+    protected $table = 'book_types';
+
 }

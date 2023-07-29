@@ -31,7 +31,7 @@
                                     <td>{{$val->slug}}</td>
                                     <td>{{\Illuminate\Support\Str::limit($val->title,40)}}</td>
                                     <td>{{$val->author}}</td>
-                                    <td>{{\Illuminate\Support\Str::limit($val->sumary,100) }}</td>
+                                    <td>{!!\Illuminate\Support\Str::limit($val->sumary,100) !!}</td>
                                     <td><img src="{{$val->book_photo}}" style="max-height:150px;max-width: 100px"></td>
                                     <td>@if($val->status=='active')
                                             <span class="text-success">{{$val->status}}
