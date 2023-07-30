@@ -106,12 +106,12 @@
                         @php $count=count($chapter) @endphp
                         <div class="col-auto mb-2">
                             @if($count==0)
-                                <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal">Đọc
+                                <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal1">Đọc
                                     online</a>
-                                <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal">Đọc mới
+                                <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal1">Đọc mới
                                     nhất</a>
                                 {{--Modal hiển thị thông báo khi sách không có chapter--}}
-                                <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                <div class="modal fade" id="myModal1" tabindex="-1" aria-labelledby="exampleModalLabel"
                                      aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
