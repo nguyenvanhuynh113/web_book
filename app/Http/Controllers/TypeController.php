@@ -17,8 +17,8 @@ class TypeController extends Controller
     public function index()
     {
         //
-        $types=DB::table('types')->orderByDesc('created_at')->get();
-        return view('admin/type/index',compact('types'));
+        $types = DB::table('types')->orderByDesc('created_at')->get();
+        return view('admin/type/index', compact('types'));
     }
 
     /**
@@ -35,24 +35,24 @@ class TypeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(TypeRequest $request)
     {
         Type::create([
-            'type_name'=>$request->type_name,
-            'title'=>$request->title,
-            'slug'=>$request->slug,
-            'status'=>$request->status
+            'type_name' => $request->type_name,
+            'title' => $request->title,
+            'slug' => $request->slug,
+            'status' => $request->status
         ]);
-        return redirect()->back()->with('status','Add type sucess');
+        return redirect()->back()->with('status', 'Add type sucess');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -63,52 +63,50 @@ class TypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $type=DB::table('types')->where('id',$id)->first();
-        return view('admin/type/edit',compact('type'));
+        $type = DB::table('types')->where('id', $id)->first();
+        return view('admin/type/edit', compact('type'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         //
-        $check=DB::table('types')->where('type_name',$request->type_name)
-            ->where('id','!=',$id)->first();
-        if(is_null($check))
-        {
-            DB::table('types')->where('id',$id)->update([
-                'type_name'=>$request->category_name,
-                'title'=>$request->title,
-                'slug'=>$request->slug,
-                'status'=>$request->status
+        $check = DB::table('types')->where('type_name', $request->type_name)
+            ->where('id', '!=', $id)->first();
+        if (is_null($check)) {
+            DB::table('types')->where('id', $id)->update([
+                'type_name' => $request->category_name,
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'status' => $request->status
             ]);
-            return redirect()->back()->with('status','Updated type sucess');
-        }
-        else
-        {
-            return redirect()->back()->with('error','Category name is already exist');
+            return redirect()->back()->with('status', 'Updated type sucess');
+        } else {
+            return redirect()->back()->with('error', 'Category name is already exist');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
+        DB::table('book_types')->where('id_type', $id)->delete();
         Type::destroy($id);
-        return redirect()->back()->with('status','Deleted type sucess');
+        return redirect()->back()->with('status', 'Deleted type sucess');
     }
 }

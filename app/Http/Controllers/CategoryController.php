@@ -116,6 +116,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        DB::table('book_categories')->where('id_category',$id)->delete();
         Category::destroy($id);
         return redirect()->back()->with('status','Deleted category');
     }
