@@ -37,10 +37,10 @@
                                     <td>
                                         <div class="btn-group" role="group" >
                                             <button type="button" class="btn btn-danger me-1" data-bs-toggle="modal"
-                                                    data-bs-target="#confirmModal">
+                                                    data-bs-target="#confirmModal_{{$val->id}}">
                                                 Delete
                                             </button>
-                                            <div class="modal fade" id="confirmModal" tabindex="-1"
+                                            <div class="modal fade" id="confirmModal_{{$val->id}}" tabindex="-1"
                                                  aria-labelledby="confirmModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
