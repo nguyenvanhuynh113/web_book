@@ -20,6 +20,17 @@
             transform: scale(1.1);
         }
 
+        /* CSS để đặt chiều cao cố định và chiều rộng tự động cho các ảnh trong carousel */
+        .owl-carousel .card-img-top {
+            height: 300px; /* Đặt chiều cao cố định, thay đổi giá trị tùy ý */
+            width: auto; /* Chiều rộng tự động sẽ giữ nguyên tỷ lệ khung hình */
+        }
+
+        /* Đảm bảo ảnh trong card có chiều cao tối đa và tỷ lệ khung hình giữ nguyên */
+        .owl-carousel .card-img-top {
+            max-height: 100%;
+            object-fit: cover;
+        }
     </style>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -60,13 +71,25 @@
         .search-item:hover {
             background-color: #f8f9fa;
         }
+
+        /* CSS để đặt chiều cao cố định và chiều rộng tự động cho các ảnh trong carousel */
+        .owl-carousel .card-img-top {
+            height: 220px; /* Đặt chiều cao cố định, thay đổi giá trị tùy ý */
+            width: auto; /* Chiều rộng tự động sẽ giữ nguyên tỷ lệ khung hình */
+        }
+
+        /* Đảm bảo ảnh trong card có chiều cao tối đa và tỷ lệ khung hình giữ nguyên */
+        .owl-carousel .card-img-top {
+            max-height: 100%;
+            object-fit: cover;
+        }
     </style>
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
 <div id="app">
-    <div class="container">
+    <div class="container fixed-top">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><i class="bi bi-book"></i> TruyenSach.com</a>
@@ -183,6 +206,7 @@
         </nav>
     </div>
     <main class="py-4">
+
         @php
             if(\Illuminate\Support\Facades\Auth::check())
                 {
@@ -243,7 +267,7 @@
             // Vòng lặp vô hạn trong carousel, khi đến cuối danh sách thì quay lại đầu
             loop: true,
             // Khoảng cách giữa các mục trong carousel
-            margin: 6,
+            margin: 4,
             // Hiển thị nút điều hướng (nút trước và nút sau) để chuyển đổi giữa các mục
             nav: true,
             // Hiển thị chấm chỉ thị để biểu thị vị trí hiện tại trong carousel
@@ -258,22 +282,20 @@
             responsive: {
                 0: {
                     // Khi màn hình nhỏ hơn hoặc bằng 0px, hiển thị 2 mục trên mỗi slide
-                    items: 2
+                    items: 4
                 },
                 600: {
                     // Khi màn hình nhỏ hơn hoặc bằng 600px, hiển thị 4 mục trên mỗi slide
-                    items: 4
+                    items: 6
                 },
                 1000: {
                     // Khi màn hình nhỏ hơn hoặc bằng 1000px, hiển thị 6 mục trên mỗi slide
-                    items: 6
+                    items: 8
                 }
             }
         });
     });
 </script>
-
-
 <!-- JavaScript -->
 <script>
     // Hàm hiển thị các gợi ý tìm kiếm
@@ -368,9 +390,6 @@
         });
     });
 </script>
-
-
-
 <div id="fb-root"></div>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v17.0"
         nonce="XShbigi6"></script>

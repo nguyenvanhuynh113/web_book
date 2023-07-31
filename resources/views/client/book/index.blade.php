@@ -1,26 +1,26 @@
 @extends('layouts.client')
 @section('content')
-    @if (session('status'))
-        <div class="alert alert-success" role="alert">
-            {{ session('status') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="alert alert-danger" role="alert">
-            {{ session('error') }}
-        </div>
-    @endif
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    <div class="container">
-        <h3 class="mt-3 mb-2"><i class="bi bi-arrow-bar-right"></i>{{$book->name}}</h3>
+    <div class="container col-md-10">
+        <h3 class="mt-5 mb-2 text-uppercase text-danger"><i class="bi bi-arrow-down"></i>{{$book->name}}</h3>
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="album py-5 bg-light">
             <div class="container">
                 <div class="row mb-2">
@@ -30,9 +30,7 @@
                             <div class="col-auto d-none d-lg-block">
                                 <img class="bd-placeholder-img card-img-top" style="height: 400px"
                                      src="{{$book->book_photo}}" role="img" aria-label="Placeholder: Thumbnail"
-                                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                                <rect width="100%" max-height="300px" fill="#55595c"></rect>
-                                </img>
+                                     preserveAspectRatio="xMidYMid slice" focusable="false">
 
                             </div>
                             <div class="col p-4 d-flex flex-column position-static">
@@ -68,7 +66,7 @@
                                             $count=$theodoi->count();
 
                                         }
-                                    $likes=\Illuminate\Support\Facades\DB::table('likes')->get();
+                                    $likes=\Illuminate\Support\Facades\DB::table('likes')->where('id_book',$book->id)->get();
                                     $countlikes=$likes->count();
                                 @endphp
                                 @guest
@@ -108,7 +106,8 @@
                             @if($count==0)
                                 <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal1">Đọc
                                     online</a>
-                                <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal1">Đọc mới
+                                <a class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#myModal1">Đọc
+                                    mới
                                     nhất</a>
                                 {{--Modal hiển thị thông báo khi sách không có chapter--}}
                                 <div class="modal fade" id="myModal1" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -163,7 +162,7 @@
             </div>
         </div>
         <hr>
-       @include('layouts.client.cungtheloai')
+        @include('layouts.client.cungtheloai')
         <hr>
         @include('layouts.client.theloai')
         <hr>

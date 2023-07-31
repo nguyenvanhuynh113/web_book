@@ -12,7 +12,8 @@
                 <rect width="100%" max-height="300px" fill="#55595c"></rect>
                 </img>
                 <div class="card-body">
-                    <p class="card-text text-success" style="height: 40px">{{$item->name}}</p>
+                    <p class="card-text text-success"
+                       style="height: 40px">{{\Illuminate\Support\Str::limit($item->name,30)}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a type="button" class="btn btn-sm btn-outline-secondary"
@@ -26,4 +27,3 @@
         @endforeach
     </div>
 </div>
-<hr>
