@@ -5,6 +5,10 @@
 <div class="row">
     <div class="owl-carousel owl-theme">
         @foreach($view as $item)
+            @php
+                $view=\Illuminate\Support\Facades\DB::table('likes')->where('id_book',$item->id)->get();
+                $countLike=$view->count();
+            @endphp
             <div class="card shadow-sm">
                 <img class="bd-placeholder-img card-img-top" style="max-height: 300px"
                      src="{{$item->book_photo}}" role="img" aria-label="Placeholder: Thumbnail"
@@ -12,14 +16,15 @@
                 <rect width="100%" max-height="300px" fill="#55595c"></rect>
                 </img>
                 <div class="card-body">
-                    <p class="card-text text-success" style="height: 40px">{{\Illuminate\Support\Str::limit($item->name,30)}}</p>
+                    <p class="card-text text-success"
+                       style="height: 40px">{{\Illuminate\Support\Str::limit($item->name,30)}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
                             <a href="{{route('xemsach',$item->id)}}" type="button"
                                class="btn btn-sm btn-outline-secondary">Detail</a>
                         </div>
                         <small class="text-muted"><i class="bi bi-eye"></i> {{$item->view}}</small>
-                        <small class="text-muted"><i class="bi bi-heart"></i> {{$item->like}}</small>
+                        <small class="text-muted"><i class="bi bi-heart"></i> {{$countLike}}</small>
                     </div>
                 </div>
             </div>

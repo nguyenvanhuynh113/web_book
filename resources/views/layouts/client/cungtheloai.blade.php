@@ -5,6 +5,10 @@
 <div class="row">
     <div class="owl-carousel owl-theme">
         @foreach($bookoftypes as $item)
+            @php
+                $view=\Illuminate\Support\Facades\DB::table('likes')->where('id_book',$item->id)->get();
+                $countLike=$view->count();
+            @endphp
             <div class="card shadow-sm">
                 <img class="bd-placeholder-img card-img-top" style="max-height: 300px"
                      src="{{$item->book_photo}}" role="img" aria-label="Placeholder: Thumbnail"
@@ -19,8 +23,8 @@
                             <a type="button" class="btn btn-sm btn-outline-secondary"
                                href="{{route('xemsach',$item->id)}}">Detail</a>
                         </div>
-                        <small class="text-muted"><i class="bi bi-eye"></i> 19999</small>
-                        <small class="text-muted"><i class="bi bi-heart"></i> 19999</small>
+                        <small class="text-muted"><i class="bi bi-eye"></i> {{$item->view}}</small>
+                        <small class="text-muted"><i class="bi bi-heart"></i> {{$countLike}}</small>
                     </div>
                 </div>
             </div>

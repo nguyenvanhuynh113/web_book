@@ -9,7 +9,7 @@
                         @foreach($book as $item)
                             <div class="col-md-2">
                                 <div class="card shadow-sm">
-                                    <img class="bd-placeholder-img card-img-top" style="max-height: 300px"
+                                    <img class="bd-placeholder-img card-img-top" style="min-height: 300px"
                                          src="{{$item->book_photo}}" role="img" aria-label="Placeholder: Thumbnail"
                                          preserveAspectRatio="xMidYMid slice" focusable="false"><title>
                                         Placeholder</title>
