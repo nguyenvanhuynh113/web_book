@@ -17,11 +17,13 @@ class TrangChuController extends Controller
     public function index()
     {
         $type = DB::table('types')->where('status', 'active')->orderByDesc('created_at')->get();
-        $book = DB::table('books')->where('status', 'active')->orderByDesc('created_at')->paginate('6');
+        $cat = DB::table('categories')->where('status', 'active')->orderByDesc('created_at')->get();
+        $book = DB::table('books')->where('status', 'active')->orderByDesc('created_at')->paginate(12);
         $carousel = DB::table('books')->where('status', 'active')->orderByDesc('created_at')->take(12)->get();
-        $new = DB::table('books')->where('status', 'active')->orderByDesc('created_at')->take(6)->get();
-        $view = DB::table('books')->where('status', 'active')->orderByDesc('view')->take(6)->get();
-        return view('client/home/trangchu', compact('book', 'carousel', 'new', 'view', 'type'));
+        $new = DB::table('books')->where('status', 'active')->orderByDesc('created_at')->take(12)->get();
+        $view = DB::table('books')->where('status', 'active')->orderByDesc('view')->take(12)->get();
+        $all = DB::table('books')->where('status', '=', 'active')->orderByDesc('created_at')->paginate(12);
+        return view('client/home/trangchu', compact('book', 'carousel', 'new', 'view', 'type', 'all','cat'));
     }
 
 //    Xem sản phẩm trong một danh mục

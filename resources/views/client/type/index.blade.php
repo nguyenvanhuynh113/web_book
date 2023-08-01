@@ -1,6 +1,6 @@
 @extends('layouts.client')
 @section('content')
-    <div class="container">
+    <div class="container col-md-10">
         <h3 class="mt-3 mb-2 text-uppercase">Thể loại / {{$typename->type_name}}</h3>
         <div class="album py-5 bg-light">
             <div class="container">
@@ -9,7 +9,7 @@
                         @foreach($book as $item)
                             <div class="col-md-2">
                                 <div class="card shadow-sm">
-                                    <img class="bd-placeholder-img card-img-top" style="max-height: 300px"
+                                    <img class="bd-placeholder-img card-img-top" style="min-height: 300px"
                                          src="{{$item->book_photo}}" role="img" aria-label="Placeholder: Thumbnail"
                                          preserveAspectRatio="xMidYMid slice" focusable="false"><title>
                                         Placeholder</title>
@@ -42,7 +42,7 @@
             {{ $book->links('client/pagination/custom') }}
         </div>
         <hr>
-      @include('layouts.client.noibat')
+        @include('layouts.client.noibat')
         <hr>
         @include('layouts.client.theloai')
         <hr>

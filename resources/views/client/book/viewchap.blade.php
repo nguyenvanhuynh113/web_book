@@ -29,7 +29,7 @@
         <h3 class="mt-3 text-uppercase"><i class="bi bi-arrow-right"></i>
             <a href="{{route('xemsach',$book->id)}}"
                style="text-decoration: none;"> {{$book->name}} </a>/ {{$chapter->name}}</h3>
-        <div class="container py-4">
+        <div class="container py-4 col-md-10">
             <div class="row">
                 <div class="btn-container">
                     <button id="readButton" class="btn btn-outline-success ms-auto mt-3" onclick="readArticle()">

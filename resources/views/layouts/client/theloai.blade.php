@@ -1,4 +1,4 @@
-<h4 class="mt-2 mb-3"> Thể loại</h4>
+<h4 class="mt-2 mb-3 mt-5"> Tất cả thể loại</h4>
 <div class="button-container">
     @foreach($type as $val)
         <a href="{{ route('bookbytype', $val->id) }}"

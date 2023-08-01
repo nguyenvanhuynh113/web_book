@@ -15,6 +15,7 @@ class CategoryController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,7 +49,7 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         Category::create([
-            'category_name' =>$request->category_name,
+            'category_name' => $request->category_name,
             'slug' => $request->slug,
             'title' => $request->title,
             'status' => $request->status
@@ -76,8 +77,8 @@ class CategoryController extends Controller
     public function edit($id)
     {
         //
-        $category=DB::table('categories')->where('id',$id)->get()->first();
-        return view('admin/category/edit',compact('category'));
+        $category = DB::table('categories')->where('id', $id)->get()->first();
+        return view('admin/category/edit', compact('category'));
     }
 
     /**
@@ -89,21 +90,18 @@ class CategoryController extends Controller
      */
     public function update(CategoryUpdateRequest $request, $id)
     {
-        $check=DB::table('categories')->where('category_name',$request->category_name)
-            ->where('id','!=',$id)->first();
-        if(is_null($check))
-        {
-            DB::table('categories')->where('id',$id)->update([
-                'category_name'=>$request->category_name,
-                'title'=>$request->title,
-                'slug'=>$request->slug,
-                'status'=>$request->status
+        $check = DB::table('categories')->where('category_name', $request->category_name)
+            ->where('id', '!=', $id)->first();
+        if (is_null($check)) {
+            DB::table('categories')->where('id', $id)->update([
+                'category_name' => $request->category_name,
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'status' => $request->status
             ]);
-            return redirect()->back()->with('status','Updated category sucess');
-        }
-        else
-        {
-            return redirect()->back()->with('error','Category name is already exist');
+            return redirect()->back()->with('status', 'Updated category sucess');
+        } else {
+            return redirect()->back()->with('error', 'Category name is already exist');
         }
 
     }
@@ -116,7 +114,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
+        DB::table('book_categories')->where('id_category', $id)->delete();
         Category::destroy($id);
-        return redirect()->back()->with('status','Deleted category');
+        return redirect()->back()->with('status', 'Deleted category');
     }
 }
