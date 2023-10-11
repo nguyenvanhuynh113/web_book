@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\TextToSpeechController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,9 @@ Route::group(['middleware' => 'role'], function () {
     Route::resource('chapter', \App\Http\Controllers\ChapterController::class);
     Route::get('getchap/{id}', [\App\Http\Controllers\BookController::class, 'getchapter'])->name('getchap');
     Route::resource('user', \App\Http\Controllers\UserController::class);
+    Route::get('booksearch', [BookController::class, 'search'])->name('book.search');
+    Route::get('adminsearch', [\App\Http\Controllers\SearchController::class, 'search'])->name('adminsearch');
+    Route::get('goiy', [\App\Http\Controllers\SearchController::class, 'searchSuggestions'])->name('goiy');
 });
 
 Route::get('/', [\App\Http\Controllers\TrangChuController::class, 'index']);
@@ -41,3 +45,4 @@ Route::patch('capnhatuser/{id}', [\App\Http\Controllers\TrangChuController::clas
 
 Route::post('theodoi/{id}', [\App\Http\Controllers\TrangChuController::class, 'theodoi'])->name('theodoi');
 Route::delete('botheodoi/{id}', [\App\Http\Controllers\TrangChuController::class, 'botheodoi'])->name('botheodoi');
+

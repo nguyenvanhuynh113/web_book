@@ -19,12 +19,12 @@
 @section('content')
     <div class="container">
         <div class="d-flex justify-content-center col-md-12">
-            <div class="col-2 float-end">
-                <div class="card">
-                    <div class="card-header">{{('Mục khác')}}</div>
-                    <div class="card-body"></div>
-                </div>
-            </div>
+            {{--            <div class="col-2 float-end">--}}
+            {{--                <div class="card">--}}
+            {{--                    <div class="card-header">{{('Mục khác')}}</div>--}}
+            {{--                    <div class="card-body"></div>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">{{ __('Thống kê') }}</div>

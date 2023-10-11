@@ -63,13 +63,13 @@
             display: block;
         }
 
-        .search-item {
+        .list-group-item {
             padding: 0.5rem;
             cursor: pointer;
         }
 
-        .search-item:hover {
-            background-color: #f8f9fa;
+        .list-group-item:hover {
+            background-color: #a7f6cf;
         }
 
         /* CSS để đặt chiều cao cố định và chiều rộng tự động cho các ảnh trong carousel */
@@ -131,10 +131,6 @@
                                            href="{{route('bookbytype',$val->id)}}">{{$val->type_name}}</a></li>
                                 @endforeach
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page"
-                               href="#"><i class="bi bi-newspaper"></i> Blog</a>
                         </li>
                     </ul>
                     <div class="search-container">

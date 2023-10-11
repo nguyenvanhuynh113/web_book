@@ -1,7 +1,7 @@
 @extends('layouts.client')
 @section('content')
     <div class="container col-md-10">
-        <h3 class="mt-3 mb-2 text-uppercase">Thể loại / {{$typename->type_name}}</h3>
+        <h3 class="mt-5 text-uppercase">Thể loại / {{$typename->type_name}}</h3>
         <div class="album py-5 bg-light">
             <div class="container">
                 @if($book->count()>0)

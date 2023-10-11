@@ -168,4 +168,16 @@ class BookController extends Controller
         return view('admin/chapter/index', compact('chapter'));
     }
 
+    // Tim kiem tu dong sach
+    public function search(Request $request)
+    {
+        $query = $request->get('query'); // Lấy từ khóa tìm kiếm từ Ajax
+
+        // Thực hiện tìm kiếm trong database
+        $results = DB::table('books')->where('name', 'LIKE', '%' . $query . '%')
+            ->orWhere('title', 'LIKE', '%' . $query . '%')
+            ->orWhere('author', 'LIKE', '%' . $query . '%')->get();
+        return response()->json($results); // Trả về kết quả dưới dạng JSON
+    }
+
 }
