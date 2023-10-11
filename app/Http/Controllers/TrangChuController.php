@@ -23,7 +23,7 @@ class TrangChuController extends Controller
         $new = DB::table('books')->where('status', 'active')->orderByDesc('created_at')->take(12)->get();
         $view = DB::table('books')->where('status', 'active')->orderByDesc('view')->take(12)->get();
         $all = DB::table('books')->where('status', '=', 'active')->orderByDesc('created_at')->paginate(12);
-        return view('client/home/trangchu', compact('book', 'carousel', 'new', 'view', 'type', 'all','cat'));
+        return view('client/home/trangchu', compact('book', 'carousel', 'new', 'view', 'type', 'all', 'cat'));
     }
 
 //    Xem sản phẩm trong một danh mục
@@ -151,12 +151,9 @@ class TrangChuController extends Controller
             })
             ->selectRaw('LOWER(categories.category_name) as category_name, LOWER(types.type_name) as type_name, LOWER(books.name) as name, LOWER(books.author) as author')
             // Chọn các cột cần lấy từ các bảng, và chuyển đổi chúng về dạng chữ thường (lowercase)
-
             ->groupBy('category_name', 'type_name', 'name', 'author')
             // Nhóm kết quả dựa trên các cột 'category_name', 'type_name', 'name', 'author' để loại bỏ các kết quả trùng lặp
-
             ->distinct() // Loại bỏ những kết quả trùng lặp
-
             ->get();
         // Thực hiện truy vấn và lấy kết quả phù hợp với từ khóa
 
